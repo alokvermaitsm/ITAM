@@ -1,0 +1,23 @@
+count =0
+Const OverwriteExisting = True
+Const ForWriting = 2
+flag=0
+
+Set fsoFolder = CreateObject("Scripting.FileSystemObject")
+Set oFile = fsoFolder.OpenTextFile ("D:\PingStatus\PingResult.txt")
+
+Do While Not oFile.AtEndOfStream
+stext =oFile.Readline()
+
+If left(sText,22)="Ping request could not" then
+a = instr(stext, "Please check the name and try again")
+temp = left(stext, a)
+Set oFile2 = fsoFolder.OpenTextFile ("D:\PingStatus\FinalResult.log",8,true)
+oFile2.WriteLine(temp)
+set oFile2 =nothing
+end if
+
+Loop
+
+msgbox "job completed"
+set oFile =nothing
