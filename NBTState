@@ -1,0 +1,45 @@
+counter =0
+
+Set fsoFolder = CreateObject("Scripting.FileSystemObject")
+Set oFile = fsoFolder.OpenTextFile ("E:\PingStatus\result.log")
+
+
+Do While Not oFile.AtEndOfStream
+
+
+stext =oFile.Readline()
+
+if instr(stext, "[") > 0 then
+
+temp=mid(stext,instr(stext,"[") +1,(instr(stext,"]")-instr(stext,"["))-1)
+
+temp="nbtstat -a "&temp&" >>C:\batchfiles\last_result.log"
+
+
+
+Set oFile2 = fsoFolder.OpenTextFile ("E:\PingStatus\last_result.cmd",8,true)
+
+temp2 =left(stext, instr(stext,"]"))
+
+oFile2.WriteLine("echo "&temp2&" >>C:\batchfiles\last_result.log")
+oFile2.WriteLine(temp)
+
+
+
+set oFile2 =nothing
+counter = counter + 1
+
+end if
+
+loop
+
+
+Set oFile2 = fsoFolder.OpenTextFile ("E:\PingStatus\last_result.cmd",8,true)
+oFile2.WriteLine("echo No. of times excuted: "&counter)
+
+set oFile2=nothing
+
+set oFile = nothing
+set fsoFolder =nothing
+
+msgbox "completed" 
