@@ -1,0 +1,44 @@
+count =0
+Const OverwriteExisting = True
+Const ForWriting = 2
+flag=0
+
+Set fsoFolder = CreateObject("Scripting.FileSystemObject")
+Set oFile = fsoFolder.OpenTextFile ("D:\PingStatus\PingStatus.txt")
+
+
+Do While Not oFile.AtEndOfStream
+
+stext =oFile.Readline()
+
+
+If left(sText,7)="Pinging" then
+temp1 = stext
+flag =1
+
+end if
+
+
+if right(stext,29) = "Destination host unreachable." then
+msgbox ""
+flag =0
+end if
+
+
+if left(stext,5) = "Reply" and flag =1 Then
+temp2 =oFile.Readline()
+Set oFile2 = fsoFolder.OpenTextFile ("D:\PingStatus\result.log",8,true)
+'wscript.echo(temp1)
+'wscript.echo(temp2)
+oFile2.WriteLine(temp1)
+oFile2.WriteLine(temp2)
+oFile2.WriteLine("------")
+flag =0
+set oFile2 =nothing
+end if
+
+'msgbox count
+Loop
+
+msgbox "job completed"
+set oFile =nothing
